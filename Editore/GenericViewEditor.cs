@@ -6,17 +6,23 @@ using System.Reflection;
 
 namespace OSK.MVVM
 {
+    [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)]
+    [CanEditMultipleObjects]
+    public class GenericViewEditor : Editor
+    {
+        public override bool RequiresConstantRepaint() => true;
 
-    [CustomEditor(typeof(ViewBase<>), true)]
-    public class GenericViewEditor : Editor {
-        public override void OnInspectorGUI() {
-            base.OnInspectorGUI();
-
-            var view = target as IViewFor;
-            if (view == null) return;
-
+        public override void OnInspectorGUI()
+        {
+            if (!(target is IViewFor view))
+            {
+                base.OnInspectorGUI();
+                return;
+            }
+            
             var vm = GetViewModel(view);
-            if (!Application.isPlaying || vm == null) {
+            if (!Application.isPlaying || vm == null)
+            {
                 EditorGUILayout.HelpBox("Play mode required to inspect runtime ViewModel", MessageType.Info);
                 return;
             }
@@ -26,51 +32,69 @@ namespace OSK.MVVM
 
             // hiển thị property
             var props = vm.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var p in props) {
+            foreach (var p in props)
+            {
                 if (!p.CanRead) continue;
 
-                if (typeof(RelayCommand).IsAssignableFrom(p.PropertyType)) {
+                if (typeof(RelayCommand).IsAssignableFrom(p.PropertyType))
+                {
                     var cmd = p.GetValue(vm) as RelayCommand;
-                    if (cmd != null && GUILayout.Button(p.Name)) {
+                    if (cmd != null && GUILayout.Button(p.Name))
+                    {
                         cmd.Execute(null);
                     }
                 }
-                else if (p.CanWrite) {
+                else if (p.CanWrite)
+                {
                     object oldValue = p.GetValue(vm);
                     object newValue = DrawField(p.PropertyType, p.Name, oldValue);
 
-                    if (!Equals(oldValue, newValue)) {
+                    if (!Equals(oldValue, newValue))
+                    {
                         p.SetValue(vm, newValue);
                     }
                 }
-                else {
+                else
+                {
                     EditorGUILayout.LabelField($"{p.Name}: {p.GetValue(vm)}");
                 }
             }
         }
 
-        private object GetViewModel(IViewFor view) {
+        private object GetViewModel(IViewFor view)
+        {
             var field = view.GetType().GetProperty("ViewModel", BindingFlags.Public | BindingFlags.Instance);
             return field?.GetValue(view);
         }
 
-        private object DrawField(Type type, string label, object value) {
-            if (type == typeof(string)) {
+        private object DrawField(Type type, string label, object value)
+        {
+            if (type == typeof(string))
+            {
                 return EditorGUILayout.TextField(label, value as string);
-            } else if (type == typeof(int)) {
+            }
+            else if (type == typeof(int))
+            {
                 return EditorGUILayout.IntField(label, (int)value);
-            } else if (type == typeof(float)) {
+            }
+            else if (type == typeof(float))
+            {
                 return EditorGUILayout.FloatField(label, (float)value);
-            } else if (type == typeof(bool)) {
+            }
+            else if (type == typeof(bool))
+            {
                 return EditorGUILayout.Toggle(label, (bool)value);
-            } else if (type.IsEnum) {
+            }
+            else if (type.IsEnum)
+            {
                 return EditorGUILayout.EnumPopup(label, (Enum)value);
-            } else {
+            }
+            else
+            {
                 EditorGUILayout.LabelField($"{label}: {value?.ToString() ?? "null"} (unsupported)");
                 return value;
             }
         }
     }
-    #endif
-
+#endif
 }

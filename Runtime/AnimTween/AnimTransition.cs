@@ -2,11 +2,8 @@ using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
 
-
-
 namespace OSK.MVVM
 {
-
     [RequireComponent(typeof(CanvasGroup))]
     public class AnimTransition : MonoBehaviour, IUITransition
     {
@@ -35,6 +32,12 @@ namespace OSK.MVVM
             float startAlpha, endAlpha;
             Vector3 startPos, endPos;
 
+            if(option.type == TransitionType.None)
+            {
+                onComplete?.Invoke();
+                return;
+            }
+            
             // offset slide theo hướng
             Vector3 slideOffset = Vector3.zero;
             if (option.type.HasFlag(TransitionType.Slide))

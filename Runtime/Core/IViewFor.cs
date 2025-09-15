@@ -5,6 +5,5 @@
         void SetViewModel(ViewModelBase vm);
         void OnOpen();
         void OnClose();
-        TransitionType Transition { get; }
     }
 }

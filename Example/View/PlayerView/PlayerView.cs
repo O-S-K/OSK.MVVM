@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 namespace OSK.MVVM
-{
-
-
+{ 
     public class PlayerView : ViewBase<PlayerViewModel>
     {
         [SerializeField] private Text nameText;

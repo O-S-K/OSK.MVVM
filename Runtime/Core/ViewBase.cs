@@ -10,25 +10,20 @@ namespace OSK.MVVM
         protected bool IsOpened { get; private set; }
 
         [SerializeField] protected int baseSortingOrder = 0;
-
         protected int SortingOrder
         {
-            get { return baseSortingOrder; }
+            get => baseSortingOrder;
             set
             {
                 baseSortingOrder = value;
-                if (canvas != null) canvas.sortingOrder = baseSortingOrder;
+                if (canvas != null) 
+                    canvas.sortingOrder = baseSortingOrder;
             }
         }
-
-
-        [SerializeField] protected TransitionType transition;
-        public TransitionType Transition => transition;
-
+        
         protected Canvas canvas;
         protected GraphicRaycaster raycaster;
 
-        // Called by UIManager or factory when view created/opened
         public virtual void SetViewModel(T vm)
         {
             if (ViewModel != null) Remove();
@@ -70,24 +65,23 @@ namespace OSK.MVVM
             Remove();
         }
 
-
         protected void SortToTop()
         {
             if (canvas == null) canvas = gameObject.GetComponent<Canvas>();
             canvas.sortingOrder = int.MaxValue;
         }
 
-        protected void ApplySorting(int layerIndex)
+        public void ApplySorting(int layerIndex)
         {
             if (canvas == null) canvas = gameObject.GetComponent<Canvas>();
             canvas.overrideSorting = true;
             canvas.sortingOrder = SortingOrder + layerIndex;
         }
 
-        protected void BlockRaycasts(bool block)
+        protected void BlockRayCasts(bool block)
         {
             if (raycaster == null) raycaster = gameObject.GetComponent<GraphicRaycaster>();
-            raycaster.enabled = block;
+            raycaster.enabled = block; 
         }
     }
 }

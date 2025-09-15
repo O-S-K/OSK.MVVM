@@ -241,7 +241,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 503
 --- !u!114 &692313918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,9 +465,11 @@ MonoBehaviour:
   uiRoot: {fileID: 692313916}
   prefabs:
   - key: PlayerView
-    prefab: {fileID: 1977060250268607020, guid: 5bb9c63cc04ae5e4094f681841f05ec5, type: 3}
+    prefab: {fileID: 1977060250268607020, guid: 5bb9c63cc04ae5e4094f681841f05ec5,
+      type: 3}
   - key: PlayerInfoView
-    prefab: {fileID: 1977060250268607020, guid: a2bdfa4b52da3e84bbe17bd68b363d14, type: 3}
+    prefab: {fileID: 1977060250268607020, guid: a2bdfa4b52da3e84bbe17bd68b363d14,
+      type: 3}
 --- !u!4 &1133892569
 Transform:
   m_ObjectHideFlags: 0
